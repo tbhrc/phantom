@@ -27,7 +27,53 @@ AI agents today are disposable. You open a chat, get an answer, close the tab, a
 
 Phantom takes a different approach: **give the AI its own computer.** A dedicated machine where it installs software, spins up databases, builds dashboards, remembers what you told it last week, and gets measurably better at your job every day. Your laptop stays yours. The agent's workspace is its own.
 
-This is not a chatbot. It is a co-worker that runs on Slack, has its own email address, creates its own tools, and builds infrastructure without asking for permission. One Phantom installed ClickHouse, loaded 28 million rows of data, and built a REST API. Nobody told it to. It decided analytics would help it work better.
+This is not a chatbot. It is a co-worker that runs on Slack, has its own email address, creates its own tools, and builds infrastructure without asking for permission. Don't take our word for it - scroll down to see what production Phantoms have actually built.
+
+## What This Actually Looks Like
+
+These are not mockups. They happened on production Phantom instances.
+
+### Built an analytics platform from scratch
+
+A Phantom was asked to help with data analysis. It installed ClickHouse on its own VM, downloaded the full Hacker News dataset, loaded 28.7 million rows spanning 2007-2021, built an analytics dashboard with interactive charts, and created a REST API to query the data. Then it registered that API as an MCP tool so it could use it in future sessions and other agents could query it too.
+
+Nobody asked it to build any of this. It identified analytics as useful and built the entire stack.
+
+<p align="center">
+  <img src="docs/assets/story-clickhouse.gif" alt="Phantom built a ClickHouse analytics dashboard with 28.7 million rows of Hacker News data" width="800" />
+</p>
+
+*28.7 million items. 755K unique authors. 4.3 million stories. Built, loaded, and served by a Phantom on its own machine.*
+
+### Extended itself with a channel it was never built with
+
+Phantom ships with Slack, Telegram, Email, and Webhook channels. It does not ship with Discord. When asked "Can I talk to you on Discord?", the Phantom said: "Not right now. Discord isn't wired up. That said, I could build it."
+
+It explained the Discord Bot API, walked the user through creating a Discord application, provided a magic link for secure token submission, and said: "Once you save it, I'll automatically spin up the container and you'll be live on Discord."
+
+After submitting the token, Phantom went live on Discord. It permanently gained a communication channel it was never designed with.
+
+<p align="center">
+  <img src="docs/assets/story-discord.png" alt="Phantom built Discord support for itself when asked" width="800" />
+</p>
+
+*The agent was honest about what it could not do, then built the capability on the spot.*
+
+### Started monitoring its own infrastructure
+
+A Phantom discovered [Vigil](https://github.com/baudsmithstudios/vigil), a lightweight open-source system monitor with 3 GitHub stars. It understood what Vigil does, integrated it into its existing ClickHouse instance, built a sync pipeline that batch-transfers metrics every 30 seconds, and created a real-time monitoring dashboard showing service health, Docker container status, network I/O, disk I/O, system load, and data pipeline health.
+
+890,450 rows. 25 metrics. Auto-refreshing. The agent is watching its own infrastructure.
+
+<p align="center">
+  <img src="docs/assets/story-vigil.gif" alt="Phantom monitoring its own infrastructure with Vigil and ClickHouse" width="800" />
+</p>
+
+*It found a 3-star open-source project, integrated it into its data pipeline, and built observability for itself.*
+
+---
+
+This is what happens when you give an AI its own computer.
 
 ## Quick Start
 
@@ -79,7 +125,7 @@ You don't need to install developer tools, learn a build system, or figure out h
 
 ### Data and Analytics
 
-- **Build your own analytics stack:** One Phantom installed ClickHouse, loaded 28 million rows of Hacker News data, built a REST API to query it, and registered the API as a tool it could use in future sessions. All on its own machine.
+- **Build your own analytics stack:** Phantom installs databases, builds ETL pipelines, and registers APIs as MCP tools for future sessions. All on its own machine. (See the ClickHouse story above.)
 - **Shareable dashboards:** "Track our PR velocity and show it to the team." Phantom builds an ECharts dashboard, serves it on a public URL with auth, and sends you the link. Your team bookmarks it. They see the same thing you see.
 - **Data exploration:** "Load this dataset and let me ask questions about it." Phantom creates a queryable environment on its VM. You ask in plain English, it translates to SQL.
 
@@ -142,36 +188,36 @@ Because the agent that can only use pre-built tools hits a ceiling. Phantom buil
 <div align="center">
 
 ```
-              External Clients
-     Claude Code | Dashboard | Other Phantoms
-                  |
-         MCP (Streamable HTTP)
-                  |
+            External Clients
+  Claude Code | Dashboard | Other Phantoms
+                    |
+          MCP (Streamable HTTP)
+                    |
 +------------------------------------------+
-|          PHANTOM (Bun process)           |
+|        PHANTOM (Bun process)             |
 |                                          |
-|  Channels        Agent Runtime           |
-|  Slack           query() + hooks         |
-|  Telegram        Prompt Assembler        |
-|  Email           base + role + evolved   |
-|  Webhook         + memory context        |
+|  Channels       Agent Runtime            |
+|  Slack          query() + hooks          |
+|  Telegram       Prompt Assembler         |
+|  Email          base + role + evolved    |
+|  Webhook        + memory context         |
 |  CLI                                     |
 |                                          |
-|  Memory System   Self-Evolution Engine   |
-|  Qdrant (vector) 6-step pipeline         |
-|  Ollama (embed)  5-gate validation       |
-|  3 collections   LLM judges (optional)   |
+|  Memory System  Self-Evolution Engine    |
+|  Qdrant         6-step pipeline          |
+|  Ollama         5-gate validation        |
+|  3 collections  LLM judges (optional)    |
 |                                          |
-|  MCP Server      Role System             |
-|  8 universal     YAML-first roles        |
-|  + role tools    Onboarding flow         |
-|  + dynamic tools Evolution focus         |
+|  MCP Server     Role System              |
+|  8 universal    YAML-first roles         |
+|  + role tools   Onboarding flow          |
+|  + dynamic      Evolution focus          |
 +------------------------------------------+
-        |              |
-   +----+----+    +----+----+
-   | Qdrant  |    | SQLite  |
-   | Docker  |    | Bun     |
-   +---------+    +---------+
+            |                |
+       +---------+      +---------+
+       | Qdrant  |      | SQLite  |
+       | Docker  |      |   Bun   |
+       +---------+      +---------+
 ```
 
 </div>
