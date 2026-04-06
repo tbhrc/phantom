@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, test } from "bun:test";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { loadConfig } from "../loader.ts";
 
@@ -16,6 +16,28 @@ function cleanup(): void {
 }
 
 describe("loadConfig", () => {
+	const envKeys = ["PHANTOM_MODEL", "PHANTOM_DOMAIN", "PHANTOM_NAME", "PHANTOM_ROLE", "PHANTOM_EFFORT", "PORT"] as const;
+	const savedEnv = new Map<string, string | undefined>();
+
+	beforeEach(() => {
+		for (const key of envKeys) {
+			savedEnv.set(key, process.env[key]);
+			delete process.env[key];
+		}
+	});
+
+	afterEach(() => {
+		for (const key of envKeys) {
+			const value = savedEnv.get(key);
+			if (value === undefined) {
+				delete process.env[key];
+			} else {
+				process.env[key] = value;
+			}
+		}
+		savedEnv.clear();
+	});
+
 	test("loads a valid config file", () => {
 		const path = writeYaml(
 			"valid.yaml",
@@ -103,15 +125,31 @@ model: claude-opus-4-6
 		);
 		const saved = process.env.PHANTOM_MODEL;
 		try {
-			process.env.PHANTOM_MODEL = "claude-sonnet-4-6";
+			process.env.PHANTOM_MODEL = "claude-opus-4-6";
 			const config = loadConfig(path);
-			expect(config.model).toBe("claude-sonnet-4-6");
+			expect(config.model).toBe("claude-opus-4-6");
 		} finally {
 			if (saved !== undefined) {
 				process.env.PHANTOM_MODEL = saved;
 			} else {
 				process.env.PHANTOM_MODEL = undefined;
 			}
+			cleanup();
+		}
+	});
+
+	test("forces sonnet model to haiku", () => {
+		const path = writeYaml(
+			"sonnet-forced.yaml",
+			`
+name: test-phantom
+model: claude-sonnet-4-6
+`,
+		);
+		try {
+			const config = loadConfig(path);
+			expect(config.model).toBe("claude-haiku-4-5");
+		} finally {
 			cleanup();
 		}
 	});

@@ -13,6 +13,7 @@ The format is based on Keep a Changelog and this project follows the existing se
 ### Changed
 - Bumped the application version from `0.18.3` to `0.18.4`.
 - Replaced the primitive static landing page in `public/index.html` with a richer operational dashboard that polls `/health` and exposes more of Phantom's runtime state.
+- Switched runtime and evolution defaults to `claude-haiku-4-5` and set `PHANTOM_MODEL=claude-haiku-4-5` to temporarily disable Sonnet usage.
 
 ## [0.18.3] - 2026-04-06
 

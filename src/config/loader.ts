@@ -5,6 +5,7 @@ import type { PhantomConfig } from "./types.ts";
 
 const DEFAULT_CONFIG_PATH = "config/phantom.yaml";
 const DEFAULT_CHANNELS_PATH = "config/channels.yaml";
+const SONNET_DISABLED_MODEL = "claude-haiku-4-5";
 
 export function loadConfig(path?: string): PhantomConfig {
 	const configPath = path ?? DEFAULT_CONFIG_PATH;
@@ -60,6 +61,13 @@ export function loadConfig(path?: string): PhantomConfig {
 		} catch {
 			console.warn(`[config] PHANTOM_PUBLIC_URL is not a valid URL: ${candidate}`);
 		}
+	}
+
+	if (config.model.includes("sonnet")) {
+		console.warn(
+			`[config] Sonnet is temporarily disabled for cost control. Forcing model to ${SONNET_DISABLED_MODEL}.`,
+		);
+		config.model = SONNET_DISABLED_MODEL;
 	}
 
 	// Derive public_url from name + domain when not explicitly set

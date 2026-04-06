@@ -14,14 +14,14 @@ type CaseJudgment = {
 };
 
 /**
- * Cascaded regression gate: Haiku first, escalate uncertain cases to Sonnet.
+ * Cascaded regression gate: Haiku first, then a follow-up pass for uncertain cases.
  *
  * Phase 1: Haiku evaluates each golden case independently (parallel).
  *   - confidence > 0.9 on all: accept Haiku's judgment
- *   - any case confidence < 0.9: escalate that case to Sonnet
+ *   - any case confidence < 0.9: queue that case for follow-up evaluation
  *
- * Phase 2: Sonnet re-evaluates only the uncertain cases.
- *   - Accept Sonnet's judgment regardless.
+ * Phase 2: Follow-up evaluation re-checks only uncertain cases using the configured
+ * fallback judge model. Accept follow-up judgments regardless.
  *
  * Returns early with pass if the golden suite is empty.
  */
@@ -84,29 +84,29 @@ export async function runRegressionJudge(
 				costUsd: hr.costUsd,
 			});
 		} else {
-			// Uncertain - escalate to Sonnet
+			// Uncertain - queue for a follow-up pass.
 			needsEscalation.push({ index: i, goldenCase: goldenSuite[i] });
 		}
 	}
 
-	// Phase 2: Sonnet re-evaluates uncertain cases
+	// Phase 2: Re-evaluate uncertain cases.
 	if (needsEscalation.length > 0) {
-		const sonnetResults = await Promise.all(
+		const fallbackResults = await Promise.all(
 			needsEscalation.map(({ goldenCase }) => evaluateCase(delta, goldenCase, currentConfigText, JUDGE_MODEL_SONNET)),
 		);
 
-		for (let i = 0; i < sonnetResults.length; i++) {
-			const sr = sonnetResults[i];
-			totalCost += sr.costUsd;
+		for (let i = 0; i < fallbackResults.length; i++) {
+			const fallbackResult = fallbackResults[i];
+			totalCost += fallbackResult.costUsd;
 
-			const verdict = sr.data.verdict === "uncertain" ? "pass" : sr.data.verdict;
+			const verdict = fallbackResult.data.verdict === "uncertain" ? "pass" : fallbackResult.data.verdict;
 			results.push({
 				caseId: needsEscalation[i].goldenCase.id,
 				verdict,
-				confidence: sr.data.confidence,
-				reasoning: sr.data.reasoning,
+				confidence: fallbackResult.data.confidence,
+				reasoning: fallbackResult.data.reasoning,
 				model: JUDGE_MODEL_SONNET,
-				costUsd: sr.costUsd,
+				costUsd: fallbackResult.costUsd,
 			});
 		}
 	}

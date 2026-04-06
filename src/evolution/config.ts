@@ -21,7 +21,7 @@ export const EvolutionConfigSchema = z.object({
 		.default({}),
 	reflection: z
 		.object({
-			model: z.string().default("claude-sonnet-4-20250514"),
+			model: z.string().default("claude-haiku-4-5"),
 			effort: z.enum(["low", "medium", "high", "max"]).default("high"),
 			max_budget_usd: z.number().positive().default(0.5),
 		})
@@ -49,6 +49,7 @@ export const EvolutionConfigSchema = z.object({
 export type EvolutionConfig = z.infer<typeof EvolutionConfigSchema>;
 
 const DEFAULT_CONFIG_PATH = "config/evolution.yaml";
+const SONNET_DISABLED_MODEL = "claude-haiku-4-5";
 
 export function loadEvolutionConfig(path?: string): EvolutionConfig {
 	const configPath = path ?? DEFAULT_CONFIG_PATH;
@@ -70,5 +71,12 @@ export function loadEvolutionConfig(path?: string): EvolutionConfig {
 		return EvolutionConfigSchema.parse({});
 	}
 
-	return result.data;
+	const config = result.data;
+	if (config.reflection.model.includes("sonnet")) {
+		console.warn(
+			`[evolution] Sonnet is temporarily disabled for cost control. Forcing reflection model to ${SONNET_DISABLED_MODEL}.`,
+		);
+		config.reflection.model = SONNET_DISABLED_MODEL;
+	}
+	return config;
 }

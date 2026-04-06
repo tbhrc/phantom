@@ -11,6 +11,7 @@ import {
 } from "./types.ts";
 
 let _client: Anthropic | null = null;
+const SONNET_DISABLED_MODEL = "claude-haiku-4-5";
 
 function getClient(): Anthropic {
 	if (!_client) {
@@ -43,9 +44,10 @@ export async function callJudge<T>(options: {
 }): Promise<JudgeResult<T>> {
 	const client = getClient();
 	const startTime = Date.now();
+	const resolvedModel = options.model.includes("sonnet") ? SONNET_DISABLED_MODEL : options.model;
 
 	const message = await client.messages.parse({
-		model: options.model,
+		model: resolvedModel,
 		max_tokens: options.maxTokens ?? JUDGE_MAX_TOKENS,
 		temperature: JUDGE_TEMPERATURE,
 		system: options.systemPrompt,
@@ -64,7 +66,7 @@ export async function callJudge<T>(options: {
 
 	const inputTokens = message.usage.input_tokens;
 	const outputTokens = message.usage.output_tokens;
-	const costUsd = estimateCost(options.model, inputTokens, outputTokens);
+	const costUsd = estimateCost(resolvedModel, inputTokens, outputTokens);
 
 	// Extract verdict and confidence from the parsed data if present
 	const data = parsed as Record<string, unknown>;
@@ -77,7 +79,7 @@ export async function callJudge<T>(options: {
 		confidence,
 		reasoning,
 		data: parsed,
-		model: options.model,
+		model: resolvedModel,
 		inputTokens,
 		outputTokens,
 		costUsd,
