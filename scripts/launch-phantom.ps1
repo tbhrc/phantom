@@ -36,7 +36,7 @@ Write-Host "[phantom] Starting Docker services..."
 docker compose up -d | Out-Host
 
 $healthUrl = "http://localhost:3100/health"
-$uiUrl = "http://localhost:3100/ui/"
+$uiUrl = "http://localhost:3100/ui/auto-login"
 $deadline = (Get-Date).AddMinutes(3)
 $ready = $false
 

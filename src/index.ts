@@ -241,8 +241,8 @@ async function main(): Promise<void> {
 		slackChannel = new SlackChannel({
 			botToken: channelsConfig.slack.bot_token,
 			appToken: channelsConfig.slack.app_token,
-			defaultChannelId: channelsConfig.slack.default_channel_id,
-			ownerUserId: channelsConfig.slack.owner_user_id,
+			defaultChannelId: channelsConfig.slack.default_channel_id ?? undefined,
+			ownerUserId: channelsConfig.slack.owner_user_id ?? undefined,
 		});
 		slackChannel.setPhantomName(config.name);
 
@@ -602,7 +602,7 @@ async function main(): Promise<void> {
 	setTriggerDeps({
 		runtime,
 		slackChannel: slackChannel ?? undefined,
-		ownerUserId: channelsConfig?.slack?.owner_user_id,
+		ownerUserId: channelsConfig?.slack?.owner_user_id ?? undefined,
 	});
 
 	// Wire secret save notification: when the user saves credentials via the form,

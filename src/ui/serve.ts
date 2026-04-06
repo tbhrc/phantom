@@ -67,8 +67,28 @@ function buildSetCookieHeader(sessionToken: string): string {
 	return `${COOKIE_NAME}=${sessionToken}; Path=/ui; HttpOnly; Secure; SameSite=Strict; Max-Age=${COOKIE_MAX_AGE}`;
 }
 
+function isLoopbackHost(hostname: string): boolean {
+	return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1" || hostname === "[::1]";
+}
+
 export async function handleUiRequest(req: Request): Promise<Response> {
 	const url = new URL(req.url);
+
+	// Local desktop convenience: allow launcher to mint a UI session on loopback only.
+	if (url.pathname === "/ui/auto-login" && req.method === "GET") {
+		if (!isLoopbackHost(url.hostname)) {
+			return Response.json({ error: "Forbidden" }, { status: 403 });
+		}
+
+		const { sessionToken } = createSession();
+		return new Response(null, {
+			status: 302,
+			headers: {
+				Location: "/ui/",
+				"Set-Cookie": buildSetCookieHeader(sessionToken),
+			},
+		});
+	}
 
 	// Login page - always accessible (GET)
 	if (url.pathname === "/ui/login" && req.method === "GET") {

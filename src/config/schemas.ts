@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const optionalNullableString = z.string().nullable().optional();
+
 export const PeerConfigSchema = z.object({
 	url: z.string().url(),
 	token: z.string().min(1),
@@ -20,19 +22,55 @@ export const PhantomConfigSchema = z.object({
 	peers: z.record(z.string(), PeerConfigSchema).optional(),
 });
 
-export const SlackChannelConfigSchema = z.object({
-	enabled: z.boolean().default(false),
-	bot_token: z.string().min(1),
-	app_token: z.string().min(1),
-	default_channel_id: z.string().optional(),
-	default_user_id: z.string().optional(),
-	owner_user_id: z.string().optional(),
-});
+export const SlackChannelConfigSchema = z
+	.object({
+		enabled: z.boolean().default(false),
+		bot_token: optionalNullableString,
+		app_token: optionalNullableString,
+		default_channel_id: optionalNullableString,
+		default_user_id: optionalNullableString,
+		owner_user_id: optionalNullableString,
+	})
+	.superRefine((value, ctx) => {
+		if (!value.enabled) return;
+		if (!value.bot_token?.trim()) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				path: ["bot_token"],
+				message: "Required when Slack is enabled",
+			});
+		}
+		if (!value.app_token?.trim()) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				path: ["app_token"],
+				message: "Required when Slack is enabled",
+			});
+		}
+		if (!value.owner_user_id?.trim()) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				path: ["owner_user_id"],
+				message: "Required when Slack is enabled",
+			});
+		}
+	});
 
-export const TelegramChannelConfigSchema = z.object({
-	enabled: z.boolean().default(false),
-	bot_token: z.string().min(1),
-});
+export const TelegramChannelConfigSchema = z
+	.object({
+		enabled: z.boolean().default(false),
+		bot_token: optionalNullableString,
+	})
+	.superRefine((value, ctx) => {
+		if (!value.enabled) return;
+		if (!value.bot_token?.trim()) {
+			ctx.addIssue({
+				code: z.ZodIssueCode.custom,
+				path: ["bot_token"],
+				message: "Required when Telegram is enabled",
+			});
+		}
+	});
 
 export const EmailChannelConfigSchema = z.object({
 	enabled: z.boolean().default(false),

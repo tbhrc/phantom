@@ -8,6 +8,7 @@ import type { RoleTemplate } from "../roles/types.ts";
 import { CostTracker } from "./cost-tracker.ts";
 import { type AgentCost, type AgentResponse, emptyCost } from "./events.ts";
 import { createDangerousCommandBlocker, createFileTracker } from "./hooks.ts";
+import { selectRuntimeModel } from "./model-router.ts";
 import { assemblePrompt } from "./prompt-assembler.ts";
 import { SessionStore } from "./session-store.ts";
 
@@ -79,11 +80,13 @@ export class AgentRuntime {
 		}
 
 		this.activeSessions.add(sessionKey);
+		const route = selectRuntimeModel(this.config, text);
+		console.log(`[runtime] Routed ${sessionKey} to ${route.model} (${route.reason})`);
 
 		const wrappedText = this.isExternalChannel(channelId) ? this.wrapWithSecurityContext(text) : text;
 
 		try {
-			return await this.runQuery(sessionKey, channelId, conversationId, wrappedText, startTime, onEvent);
+			return await this.runQuery(sessionKey, channelId, conversationId, wrappedText, startTime, route, onEvent);
 		} finally {
 			this.activeSessions.delete(sessionKey);
 		}
@@ -109,6 +112,7 @@ export class AgentRuntime {
 		conversationId: string,
 		text: string,
 		startTime: number,
+		route: ReturnType<typeof selectRuntimeModel>,
 		onEvent?: (event: RuntimeEvent) => void,
 	): Promise<AgentResponse> {
 		let session = this.sessionStore.findActive(channelId, conversationId);
@@ -145,7 +149,7 @@ export class AgentRuntime {
 			const queryStream = query({
 				prompt: text,
 				options: {
-					model: this.config.model,
+					model: route.model,
 					permissionMode: "bypassPermissions",
 					allowDangerouslySkipPermissions: true,
 					settingSources: ["project"],
@@ -155,7 +159,7 @@ export class AgentRuntime {
 						append: appendPrompt,
 					},
 					persistSession: true,
-					effort: this.config.effort,
+					effort: route.effort,
 					...(this.config.max_budget_usd > 0 ? { maxBudgetUsd: this.config.max_budget_usd } : {}),
 					abortController: controller,
 					hooks: {
@@ -248,7 +252,7 @@ export class AgentRuntime {
 		}
 
 		this.lastTrackedFiles = fileTracker.getTrackedFiles();
-		this.costTracker.record(sessionKey, cost, this.config.model);
+		this.costTracker.record(sessionKey, cost, route.model);
 		this.sessionStore.touch(sessionKey);
 
 		return {

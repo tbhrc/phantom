@@ -86,8 +86,9 @@ RUN mkdir -p /app/data /app/repos && \
 # Backup phantom-config defaults so they survive empty volume mount
 RUN cp -r /app/phantom-config /app/phantom-config-defaults
 
-# Make entrypoint executable
-RUN chmod +x /app/scripts/docker-entrypoint.sh
+# Normalize line endings for shell scripts copied from Windows hosts, then make executable
+RUN sed -i 's/\r$//' /app/scripts/docker-entrypoint.sh && \
+    chmod +x /app/scripts/docker-entrypoint.sh
 
 # Health check: curl the /health endpoint every 30 seconds
 # Start period gives 120s for first-run model pull + init

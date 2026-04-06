@@ -81,7 +81,7 @@ export function createWebUiToolServer(publicUrl: string | undefined): McpSdkServ
 
 	const generateLoginTool = tool(
 		"phantom_generate_login",
-		"Generate a magic link for web UI authentication. Send this link to the user via Slack. " +
+		"Generate a magic link for web UI authentication. Send this link to the user via the active chat channel. " +
 			"The link expires in 10 minutes. After authentication, the session lasts 7 days.",
 		{},
 		async () => {
@@ -94,7 +94,7 @@ export function createWebUiToolServer(publicUrl: string | undefined): McpSdkServ
 					// sessionToken intentionally excluded - agent should only share the magic link
 					expiresIn: "10 minutes",
 					sessionDuration: "7 days",
-					note: "Send the magic link to the user via Slack. They click it and are authenticated instantly.",
+					note: "Send the magic link to the user via Telegram or the active Phantom chat. They click it and are authenticated instantly.",
 				});
 			} catch (error: unknown) {
 				const msg = error instanceof Error ? error.message : String(error);

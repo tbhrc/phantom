@@ -161,7 +161,7 @@ export function loginPageHtml(): string {
       <div class="card-body p-8">
         <h1 class="text-lg font-semibold tracking-tight mb-1">Welcome back</h1>
         <p class="text-sm text-base-content/50 mb-6 leading-relaxed">
-          Enter the access token from your Slack DM to continue.
+          Enter the access token or open the magic link sent by your Phantom chat to continue.
         </p>
 
         <form id="login-form" autocomplete="off">
@@ -212,7 +212,7 @@ export function loginPageHtml(): string {
         </div>
 
         <p class="text-center text-xs text-base-content/40 leading-relaxed">
-          Ask your Phantom agent for a magic link via Slack.
+          Ask your Phantom agent for a magic link in Telegram or your active Phantom channel.
         </p>
       </div>
     </div>
