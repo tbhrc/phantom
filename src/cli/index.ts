@@ -17,7 +17,7 @@ function printHelp(): void {
 }
 
 function printVersion(): void {
-	console.log("phantom 0.18.3");
+	console.log("phantom 0.18.4");
 }
 
 export async function runCli(argv: string[]): Promise<void> {

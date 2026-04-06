@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Phantom</title>
+  <title>Phantom Control Room</title>
 
-  <!-- Flash prevention -->
   <script>
     (function() {
       var stored = localStorage.getItem('phantom-theme');
@@ -17,365 +16,647 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
   <style type="text/tailwindcss">
     @theme {
-      --color-phantom: #0891b2;
-      --color-phantom-bright: #22d3ee;
-      --color-phantom-dim: #0e7490;
-      --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
-      --font-family-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --font-family-sans: 'Space Grotesk', system-ui, sans-serif;
+      --font-family-mono: 'IBM Plex Mono', ui-monospace, monospace;
     }
 
     [data-theme="phantom-light"] {
-      --color-base-100: #fafaf9;
-      --color-base-200: #ffffff;
-      --color-base-300: #e7e5e4;
-      --color-base-content: #1c1917;
-      --color-primary: #0891b2;
-      --color-primary-content: #ffffff;
-      --color-secondary: #57534e;
-      --color-secondary-content: #ffffff;
-      --color-accent: #0891b2;
-      --color-accent-content: #ffffff;
-      --color-neutral: #f5f5f4;
-      --color-neutral-content: #57534e;
-      --color-info: #2563eb;
-      --color-info-content: #ffffff;
-      --color-success: #16a34a;
-      --color-success-content: #ffffff;
-      --color-warning: #ca8a04;
-      --color-warning-content: #ffffff;
-      --color-error: #dc2626;
-      --color-error-content: #ffffff;
-      --radius-box: 0.75rem;
-      --radius-field: 0.625rem;
-      --radius-selector: 0.5rem;
-      --border: 1px;
-      --depth: 1;
-      --noise: 0;
+      --color-base-100: #f7f5ef;
+      --color-base-200: #fffdf8;
+      --color-base-300: #ded8cb;
+      --color-base-content: #1f1b16;
+      --color-primary: #0f766e;
+      --color-primary-content: #f8fffd;
+      --color-secondary: #c2410c;
+      --color-secondary-content: #fff7f2;
+      --color-accent: #1d4ed8;
+      --color-accent-content: #eff6ff;
+      --color-neutral: #efe9de;
+      --color-neutral-content: #53493a;
+      --color-success: #15803d;
+      --color-success-content: #f0fdf4;
+      --color-warning: #b45309;
+      --color-warning-content: #fffbeb;
+      --color-error: #b91c1c;
+      --color-error-content: #fef2f2;
       color-scheme: light;
     }
 
     [data-theme="phantom-dark"] {
-      --color-base-100: #0c0a09;
-      --color-base-200: #1c1917;
-      --color-base-300: #292524;
-      --color-base-content: #fafaf9;
-      --color-primary: #22d3ee;
-      --color-primary-content: #0c0a09;
-      --color-secondary: #a8a29e;
-      --color-secondary-content: #0c0a09;
-      --color-accent: #22d3ee;
-      --color-accent-content: #0c0a09;
-      --color-neutral: #1c1917;
-      --color-neutral-content: #a8a29e;
-      --color-info: #60a5fa;
-      --color-info-content: #0c0a09;
+      --color-base-100: #111310;
+      --color-base-200: #171a16;
+      --color-base-300: #2a3129;
+      --color-base-content: #f3efe4;
+      --color-primary: #5eead4;
+      --color-primary-content: #081311;
+      --color-secondary: #fb923c;
+      --color-secondary-content: #1a0d04;
+      --color-accent: #60a5fa;
+      --color-accent-content: #08111f;
+      --color-neutral: #1d211d;
+      --color-neutral-content: #bbc5b6;
       --color-success: #4ade80;
-      --color-success-content: #0c0a09;
+      --color-success-content: #07130a;
       --color-warning: #fbbf24;
-      --color-warning-content: #0c0a09;
+      --color-warning-content: #191203;
       --color-error: #f87171;
-      --color-error-content: #0c0a09;
-      --radius-box: 0.75rem;
-      --radius-field: 0.625rem;
-      --radius-selector: 0.5rem;
-      --border: 1px;
-      --depth: 1;
-      --noise: 0;
+      --color-error-content: #190707;
       color-scheme: dark;
     }
   </style>
 
-  <!-- Custom CSS kept outside text/tailwindcss to avoid Tailwind v4 browser CDN parse errors
-       when var() references are used inside linear-gradient and other complex values -->
   <style>
     html {
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(29, 78, 216, 0.12), transparent 24%),
+        radial-gradient(circle at bottom center, rgba(194, 65, 12, 0.1), transparent 30%),
+        var(--color-base-100);
     }
 
-    main {
-      animation: fadeIn 0.3s ease-out;
+    .panel {
+      border: 1px solid var(--color-base-300);
+      background: color-mix(in srgb, var(--color-base-200) 92%, transparent);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 40px rgba(0,0,0,0.06);
     }
 
-    .card {
-      transition: box-shadow 0.15s ease, border-color 0.15s ease;
+    [data-theme="phantom-dark"] .panel {
+      box-shadow: 0 18px 48px rgba(0,0,0,0.26);
     }
 
-    .card-hover:hover {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      border-color: var(--color-base-300);
+    .metric-card {
+      border: 1px solid var(--color-base-300);
+      background: linear-gradient(180deg, color-mix(in srgb, var(--color-base-200) 94%, transparent), color-mix(in srgb, var(--color-neutral) 90%, transparent));
     }
 
-    [data-theme="phantom-dark"] .card-hover:hover {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-    }
-
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 9999px;
+    .signal {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
       display: inline-block;
-    }
-
-    .status-dot-pulse {
-      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      box-shadow: 0 0 0 0 rgba(0,0,0,0.12);
+      animation: pulse 2.2s infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+      0% { transform: scale(1); opacity: 1; }
+      70% { transform: scale(1.25); opacity: 0.55; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
-    .skeleton-line {
-      height: 14px;
-      border-radius: 6px;
-      background: linear-gradient(90deg, var(--color-base-300) 25%, transparent 50%, var(--color-base-300) 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s infinite;
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
     }
 
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+    .mono-block {
+      font-family: 'IBM Plex Mono', ui-monospace, monospace;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .label-caps {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 11px;
+      opacity: 0.65;
+    }
+
+    .pill {
+      border: 1px solid var(--color-base-300);
+      background: color-mix(in srgb, var(--color-base-200) 85%, transparent);
+    }
+
+    .action-btn {
+      justify-content: flex-start;
+      gap: 10px;
     }
   </style>
 </head>
-<body class="bg-base-100 text-base-content font-sans min-h-screen">
-
-  <!-- Navbar -->
-  <nav class="navbar bg-base-200 border-b border-base-300 px-6 sticky top-0 z-50 backdrop-blur-md bg-base-200/90">
-    <div class="navbar-start gap-3">
-      <a href="/ui/" class="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-        <img src="/ui/phantom-logo.svg" alt="Phantom" class="w-7 h-7" />
-        <span class="font-semibold text-base tracking-tight">Phantom</span>
-      </a>
-      <span class="text-base-content/20">/</span>
-      <span class="text-sm text-base-content/60 font-medium">Welcome</span>
-    </div>
-    <div class="navbar-end gap-3">
-      <span class="text-xs text-base-content/40 font-mono hidden sm:inline" id="current-date"></span>
-      <button id="theme-toggle" class="btn btn-ghost btn-sm btn-square" aria-label="Toggle theme">
-        <svg id="icon-sun" class="w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-        </svg>
-        <svg id="icon-moon" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
-        </svg>
-      </button>
+<body class="min-h-screen text-base-content font-sans">
+  <nav class="px-5 py-4">
+    <div class="panel mx-auto flex max-w-7xl items-center justify-between rounded-2xl px-4 py-3">
+      <div class="flex items-center gap-3">
+        <img src="/ui/phantom-logo.svg" alt="Phantom" class="h-9 w-9" />
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-bold tracking-tight">Phantom</span>
+            <span class="badge badge-sm border-primary/25 bg-primary/10 text-primary">control room</span>
+          </div>
+          <p class="text-sm opacity-60">Operational dashboard for the local Phantom runtime</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span id="current-date" class="hidden font-mono text-xs opacity-50 sm:inline"></span>
+        <button id="theme-toggle" class="btn btn-ghost btn-sm btn-square" aria-label="Toggle theme">
+          <svg id="icon-sun" class="hidden h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+          </svg>
+          <svg id="icon-moon" class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+          </svg>
+        </button>
+      </div>
     </div>
   </nav>
 
-  <main class="max-w-3xl mx-auto px-6 py-16">
-
-    <!-- Header -->
-    <div class="text-center mb-12">
-      <div class="inline-flex items-center gap-3 mb-4">
-        <img src="/ui/phantom-logo.svg" alt="Phantom" class="w-10 h-10" />
-        <h1 class="text-3xl font-semibold tracking-tight">Phantom</h1>
-        <span class="badge badge-sm bg-primary/10 text-primary border-primary/20 font-mono text-xs">agent</span>
-      </div>
-      <p class="text-base text-base-content/50 max-w-lg mx-auto leading-relaxed">
-        Your autonomous AI co-worker. Phantom creates pages here for dashboards,
-        reports, charts, and anything that Slack can't display.
-      </p>
-    </div>
-
-    <!-- Status Card -->
-    <div class="card bg-base-200 border border-base-300 mb-6">
-      <div class="card-body p-6">
-        <div class="flex items-center justify-between mb-5">
-          <h2 class="text-sm font-semibold uppercase tracking-wider text-base-content/50">Agent Status</h2>
-          <span id="status-badge" class="badge badge-sm bg-base-content/10 text-base-content/40 border-base-content/10">
-            checking...
-          </span>
-        </div>
-
-        <!-- Skeleton (visible while loading) -->
-        <div id="status-skeleton" class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div>
-            <p class="text-xs text-base-content/40 uppercase tracking-wider mb-2">Agent</p>
-            <div class="skeleton-line w-20 h-4"></div>
+  <main class="mx-auto flex max-w-7xl flex-col gap-5 px-5 pb-10">
+    <section class="grid gap-5 lg:grid-cols-[1.5fr_1fr]">
+      <div class="panel rounded-[28px] p-6 md:p-8">
+        <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+          <div class="max-w-2xl">
+            <p class="label-caps mb-3">Live Runtime</p>
+            <h1 class="mb-3 text-3xl font-bold tracking-tight md:text-5xl">Run Phantom like an operator, not a spectator.</h1>
+            <p class="max-w-xl text-sm leading-7 opacity-70 md:text-base">
+              This dashboard tracks model runtime, memory health, channel state, onboarding status, peers, and raw health output without forcing you into the raw endpoints first.
+            </p>
           </div>
-          <div>
-            <p class="text-xs text-base-content/40 uppercase tracking-wider mb-2">Version</p>
-            <div class="skeleton-line w-16 h-4"></div>
-          </div>
-          <div>
-            <p class="text-xs text-base-content/40 uppercase tracking-wider mb-2">Uptime</p>
-            <div class="skeleton-line w-14 h-4"></div>
-          </div>
-          <div>
-            <p class="text-xs text-base-content/40 uppercase tracking-wider mb-2">Evolution</p>
-            <div class="skeleton-line w-12 h-4"></div>
+          <div class="flex min-w-[210px] flex-col gap-3 rounded-2xl border border-base-300 bg-base-100/70 p-4">
+            <div class="flex items-center justify-between">
+              <span class="label-caps">Session</span>
+              <span id="status-badge" class="badge badge-sm">checking</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="status-signal" class="signal bg-warning"></span>
+              <span id="status-summary" class="text-sm font-medium">Waiting for health data</span>
+            </div>
+            <div class="text-xs opacity-60">
+              <div>Last refresh: <span id="last-refresh">never</span></div>
+              <div>Role: <span id="headline-role">-</span></div>
+            </div>
           </div>
         </div>
 
-        <!-- Real data (hidden until loaded) -->
-        <div id="status-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 hidden">
-          <div>
-            <p class="text-xs text-base-content/40 uppercase tracking-wider">Agent</p>
-            <p class="text-sm font-medium mt-1.5" id="stat-agent">-</p>
+        <div class="status-grid">
+          <div class="metric-card rounded-2xl p-4">
+            <div class="label-caps mb-2">Agent</div>
+            <div id="stat-agent" class="text-xl font-bold">-</div>
+            <div class="mt-2 text-xs opacity-60">Primary runtime identity</div>
           </div>
-          <div>
-            <p class="text-xs text-base-content/40 uppercase tracking-wider">Version</p>
-            <p class="text-sm font-medium mt-1.5 font-mono" id="stat-version">-</p>
+          <div class="metric-card rounded-2xl p-4">
+            <div class="label-caps mb-2">Version</div>
+            <div id="stat-version" class="font-mono text-xl font-bold">-</div>
+            <div class="mt-2 text-xs opacity-60">Release currently served</div>
           </div>
-          <div>
-            <p class="text-xs text-base-content/40 uppercase tracking-wider">Uptime</p>
-            <p class="text-sm font-medium mt-1.5" id="stat-uptime">-</p>
+          <div class="metric-card rounded-2xl p-4">
+            <div class="label-caps mb-2">Uptime</div>
+            <div id="stat-uptime" class="text-xl font-bold">-</div>
+            <div class="mt-2 text-xs opacity-60">Process lifetime</div>
           </div>
-          <div>
-            <p class="text-xs text-base-content/40 uppercase tracking-wider">Evolution</p>
-            <p class="text-sm font-medium mt-1.5" id="stat-evolution">-</p>
+          <div class="metric-card rounded-2xl p-4">
+            <div class="label-caps mb-2">Evolution</div>
+            <div id="stat-evolution" class="text-xl font-bold">-</div>
+            <div class="mt-2 text-xs opacity-60">Current config generation</div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Quick Links -->
-    <div class="card bg-base-200 border border-base-300">
-      <div class="card-body p-6">
-        <h2 class="text-sm font-semibold uppercase tracking-wider text-base-content/50 mb-4">Quick Links</h2>
-        <div class="space-y-2">
-          <a href="/health" target="_blank" class="flex items-center gap-3 p-3 rounded-xl hover:bg-base-100 transition-colors group">
-            <span class="w-8 h-8 rounded-lg bg-success/10 text-success flex items-center justify-center text-sm font-medium">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-            </span>
-            <div class="flex-1">
-              <p class="text-sm font-medium group-hover:text-primary transition-colors">Health Endpoint</p>
-              <p class="text-xs text-base-content/40">/health - JSON status of all subsystems</p>
-            </div>
-            <svg class="w-4 h-4 text-base-content/20 group-hover:text-base-content/40 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+      <div class="panel rounded-[28px] p-6">
+        <div class="mb-4 flex items-center justify-between">
+          <div>
+            <p class="label-caps mb-2">Operator Actions</p>
+            <h2 class="text-xl font-bold tracking-tight">Useful links and shortcuts</h2>
+          </div>
+          <span class="pill rounded-full px-3 py-1 font-mono text-xs" id="public-url-chip">local</span>
+        </div>
+        <div class="space-y-3">
+          <button class="btn action-btn w-full" id="refresh-btn" type="button">
+            <span class="badge badge-sm border-primary/20 bg-primary/10 text-primary">now</span>
+            Refresh health snapshot
+          </button>
+          <a class="btn action-btn w-full" href="/health" target="_blank">
+            <span class="badge badge-sm border-success/20 bg-success/10 text-success">json</span>
+            Open raw health endpoint
           </a>
-          <a href="/mcp" target="_blank" class="flex items-center gap-3 p-3 rounded-xl hover:bg-base-100 transition-colors group">
-            <span class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-sm font-medium">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 0 0 2.25-2.25V6a2.25 2.25 0 0 0-2.25-2.25H6A2.25 2.25 0 0 0 3.75 6v2.25A2.25 2.25 0 0 0 6 10.5Zm0 9.75h2.25A2.25 2.25 0 0 0 10.5 18v-2.25a2.25 2.25 0 0 0-2.25-2.25H6a2.25 2.25 0 0 0-2.25 2.25V18A2.25 2.25 0 0 0 6 20.25Zm9.75-9.75H18a2.25 2.25 0 0 0 2.25-2.25V6A2.25 2.25 0 0 0 18 3.75h-2.25A2.25 2.25 0 0 0 13.5 6v2.25a2.25 2.25 0 0 0 2.25 2.25Z" /></svg>
-            </span>
-            <div class="flex-1">
-              <p class="text-sm font-medium group-hover:text-primary transition-colors">MCP Endpoint</p>
-              <p class="text-xs text-base-content/40">/mcp - Model Context Protocol for tool access</p>
-            </div>
-            <svg class="w-4 h-4 text-base-content/20 group-hover:text-base-content/40 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+          <a class="btn action-btn w-full" href="/mcp" target="_blank">
+            <span class="badge badge-sm border-accent/20 bg-accent/10 text-accent">mcp</span>
+            Open MCP endpoint
           </a>
-          <a href="/ui/_base.html" class="flex items-center gap-3 p-3 rounded-xl hover:bg-base-100 transition-colors group">
-            <span class="w-8 h-8 rounded-lg bg-info/10 text-info flex items-center justify-center text-sm font-medium">
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" /></svg>
-            </span>
-            <div class="flex-1">
-              <p class="text-sm font-medium group-hover:text-primary transition-colors">Base Template</p>
-              <p class="text-xs text-base-content/40">/_base.html - Design system reference</p>
-            </div>
-            <svg class="w-4 h-4 text-base-content/20 group-hover:text-base-content/40 transition-colors" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+          <a class="btn action-btn w-full" href="/ui/_base.html" target="_blank">
+            <span class="badge badge-sm border-secondary/20 bg-secondary/10 text-secondary">base</span>
+            Open base template
           </a>
+          <button class="btn action-btn w-full" id="copy-health-btn" type="button">
+            <span class="badge badge-sm border-base-300 bg-base-100">copy</span>
+            Copy current health JSON
+          </button>
+        </div>
+        <div id="copy-feedback" class="mt-4 text-xs opacity-60"></div>
+      </div>
+    </section>
+
+    <section class="grid gap-5 xl:grid-cols-[1.2fr_1.2fr_0.9fr]">
+      <div class="panel rounded-[28px] p-6">
+        <div class="mb-4 flex items-center justify-between">
+          <div>
+            <p class="label-caps mb-2">Subsystems</p>
+            <h2 class="text-xl font-bold">System health matrix</h2>
+          </div>
+          <span id="system-health-note" class="text-xs opacity-60">Live from /health</span>
+        </div>
+        <div id="system-grid" class="grid gap-3 sm:grid-cols-2"></div>
+      </div>
+
+      <div class="panel rounded-[28px] p-6">
+        <div class="mb-4">
+          <p class="label-caps mb-2">Channels and Peers</p>
+          <h2 class="text-xl font-bold">Connectivity surface</h2>
+        </div>
+        <div class="mb-4">
+          <div class="mb-2 text-sm font-semibold">Channels</div>
+          <div id="channels-list" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div class="mb-4">
+          <div class="mb-2 text-sm font-semibold">Peer links</div>
+          <div id="peers-list" class="space-y-2 text-sm opacity-70"></div>
+        </div>
+        <div>
+          <div class="mb-2 text-sm font-semibold">Onboarding</div>
+          <div id="onboarding-card" class="rounded-2xl border border-base-300 bg-base-100/70 p-4 text-sm"></div>
         </div>
       </div>
-    </div>
 
+      <div class="panel rounded-[28px] p-6">
+        <div class="mb-4">
+          <p class="label-caps mb-2">Runtime Readout</p>
+          <h2 class="text-xl font-bold">Interpretation</h2>
+        </div>
+        <div id="insights-list" class="space-y-3 text-sm leading-6"></div>
+      </div>
+    </section>
+
+    <section class="grid gap-5 lg:grid-cols-[1fr_1.1fr]">
+      <div class="panel rounded-[28px] p-6">
+        <div class="mb-4 flex items-center justify-between">
+          <div>
+            <p class="label-caps mb-2">Timeline</p>
+            <h2 class="text-xl font-bold">Recent runtime markers</h2>
+          </div>
+          <span class="text-xs opacity-60">derived client-side</span>
+        </div>
+        <div id="timeline-list" class="space-y-3"></div>
+      </div>
+
+      <div class="panel rounded-[28px] p-6">
+        <div class="mb-4 flex items-center justify-between">
+          <div>
+            <p class="label-caps mb-2">Inspector</p>
+            <h2 class="text-xl font-bold">Raw health snapshot</h2>
+          </div>
+          <button id="toggle-json-btn" class="btn btn-ghost btn-sm" type="button">collapse</button>
+        </div>
+        <pre id="raw-json" class="mono-block max-h-[420px] overflow-auto rounded-2xl border border-base-300 bg-base-100/80 p-4 text-xs leading-6">Loading...</pre>
+      </div>
+    </section>
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-base-300 mt-16">
-    <div class="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between text-xs text-base-content/40">
-      <div class="flex items-center gap-2">
-        <img src="/ui/phantom-logo.svg" alt="Phantom" class="w-4 h-4" />
-        <span>Phantom Web UI</span>
-      </div>
-      <span class="font-mono" id="footer-time"></span>
-    </div>
-  </footer>
-
-  <!-- Theme toggle -->
   <script>
     (function() {
-      var toggle = document.getElementById('theme-toggle');
-      var sun = document.getElementById('icon-sun');
-      var moon = document.getElementById('icon-moon');
+      var state = {
+        health: null,
+        collapsedJson: false
+      };
 
-      function updateIcons() {
+      var themeToggle = document.getElementById('theme-toggle');
+      var iconSun = document.getElementById('icon-sun');
+      var iconMoon = document.getElementById('icon-moon');
+      var refreshBtn = document.getElementById('refresh-btn');
+      var copyBtn = document.getElementById('copy-health-btn');
+      var copyFeedback = document.getElementById('copy-feedback');
+      var toggleJsonBtn = document.getElementById('toggle-json-btn');
+      var rawJson = document.getElementById('raw-json');
+
+      document.getElementById('current-date').textContent = new Date().toISOString().split('T')[0];
+
+      function updateThemeIcons() {
         var theme = document.documentElement.getAttribute('data-theme');
         var isDark = theme === 'phantom-dark';
-        sun.classList.toggle('hidden', !isDark);
-        moon.classList.toggle('hidden', isDark);
+        iconSun.classList.toggle('hidden', !isDark);
+        iconMoon.classList.toggle('hidden', isDark);
       }
 
-      updateIcons();
+      updateThemeIcons();
 
-      toggle.addEventListener('click', function() {
+      themeToggle.addEventListener('click', function() {
         var current = document.documentElement.getAttribute('data-theme');
         var next = current === 'phantom-dark' ? 'phantom-light' : 'phantom-dark';
         document.documentElement.setAttribute('data-theme', next);
         localStorage.setItem('phantom-theme', next);
-        updateIcons();
+        updateThemeIcons();
       });
 
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
-        if (!localStorage.getItem('phantom-theme')) {
-          var theme = e.matches ? 'phantom-dark' : 'phantom-light';
-          document.documentElement.setAttribute('data-theme', theme);
-          updateIcons();
+      function formatUptime(seconds) {
+        if (seconds < 60) return seconds + 's';
+        if (seconds < 3600) return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
+        if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ' + Math.floor((seconds % 3600) / 60) + 'm';
+        return Math.floor(seconds / 86400) + 'd ' + Math.floor((seconds % 86400) / 3600) + 'h';
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function toneClass(status) {
+        if (status === 'ok' || status === true) return 'text-success';
+        if (status === 'degraded') return 'text-warning';
+        return 'text-error';
+      }
+
+      function badgeClass(status) {
+        if (status === 'ok') return 'badge border-success/20 bg-success/10 text-success';
+        if (status === 'degraded') return 'badge border-warning/20 bg-warning/10 text-warning';
+        return 'badge border-error/20 bg-error/10 text-error';
+      }
+
+      function booleanBadge(value) {
+        return value
+          ? '<span class="badge border-success/20 bg-success/10 text-success">online</span>'
+          : '<span class="badge border-error/20 bg-error/10 text-error">offline</span>';
+      }
+
+      function renderSystemGrid(data) {
+        var items = [
+          {
+            title: 'Memory / Qdrant',
+            value: data.memory && data.memory.qdrant ? 'ready' : 'down',
+            detail: 'Vector memory backend',
+            ok: !!(data.memory && data.memory.qdrant)
+          },
+          {
+            title: 'Embeddings / Ollama',
+            value: data.memory && data.memory.ollama ? 'ready' : 'down',
+            detail: 'Embedding model service',
+            ok: !!(data.memory && data.memory.ollama)
+          },
+          {
+            title: 'Channel Surface',
+            value: Object.keys(data.channels || {}).length ? Object.keys(data.channels || {}).length + ' active slot(s)' : 'none',
+            detail: 'Configured chat channels',
+            ok: Object.keys(data.channels || {}).some(function(key) { return !!data.channels[key]; })
+          },
+          {
+            title: 'Onboarding',
+            value: data.onboarding || 'unknown',
+            detail: 'Current onboarding state',
+            ok: data.onboarding !== 'pending'
+          },
+          {
+            title: 'Evolution',
+            value: 'Gen ' + ((data.evolution && data.evolution.generation) || 0),
+            detail: 'Current evolution generation',
+            ok: true
+          },
+          {
+            title: 'Role',
+            value: data.role ? (data.role.name || data.role.id) : '-',
+            detail: 'Active runtime role',
+            ok: true
+          }
+        ];
+
+        document.getElementById('system-grid').innerHTML = items.map(function(item) {
+          return '' +
+            '<div class="metric-card rounded-2xl p-4">' +
+              '<div class="mb-3 flex items-center justify-between">' +
+                '<span class="text-sm font-semibold">' + escapeHtml(item.title) + '</span>' +
+                (item.ok ? '<span class="signal bg-success"></span>' : '<span class="signal bg-error"></span>') +
+              '</div>' +
+              '<div class="text-lg font-bold">' + escapeHtml(item.value) + '</div>' +
+              '<div class="mt-2 text-xs opacity-60">' + escapeHtml(item.detail) + '</div>' +
+            '</div>';
+        }).join('');
+      }
+
+      function renderChannels(data) {
+        var channels = data.channels || {};
+        var names = Object.keys(channels);
+        var container = document.getElementById('channels-list');
+        if (!names.length) {
+          container.innerHTML = '<span class="pill rounded-full px-3 py-2 text-sm opacity-60">No channels configured</span>';
+          return;
         }
-      });
-    })();
-  </script>
 
-  <!-- Data loading -->
-  <script>
-    document.getElementById('current-date').textContent = new Date().toISOString().split('T')[0];
-    document.getElementById('footer-time').textContent = new Date().toISOString();
+        container.innerHTML = names.map(function(name) {
+          return '' +
+            '<span class="pill inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm">' +
+              '<span class="h-2.5 w-2.5 rounded-full ' + (channels[name] ? 'bg-success' : 'bg-error') + '"></span>' +
+              '<span class="font-medium">' + escapeHtml(name) + '</span>' +
+              '<span class="opacity-60">' + (channels[name] ? 'connected' : 'registered') + '</span>' +
+            '</span>';
+        }).join('');
+      }
 
-    function formatUptime(seconds) {
-      if (seconds < 60) return seconds + 's';
-      if (seconds < 3600) return Math.floor(seconds / 60) + 'm ' + (seconds % 60) + 's';
-      if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ' + Math.floor((seconds % 3600) / 60) + 'm';
-      return Math.floor(seconds / 86400) + 'd ' + Math.floor((seconds % 86400) / 3600) + 'h';
-    }
+      function renderPeers(data) {
+        var peers = data.peers || {};
+        var keys = Object.keys(peers);
+        var container = document.getElementById('peers-list');
+        if (!keys.length) {
+          container.innerHTML = '<div class="rounded-2xl border border-base-300 bg-base-100/70 p-4 opacity-60">No peer Phantom connections are currently reported.</div>';
+          return;
+        }
 
-    fetch('/health')
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
+        container.innerHTML = keys.map(function(key) {
+          var peer = peers[key];
+          return '' +
+            '<div class="rounded-2xl border border-base-300 bg-base-100/70 p-4">' +
+              '<div class="mb-1 flex items-center justify-between">' +
+                '<span class="font-semibold">' + escapeHtml(key) + '</span>' +
+                (peer.healthy ? '<span class="badge border-success/20 bg-success/10 text-success">healthy</span>' : '<span class="badge border-error/20 bg-error/10 text-error">degraded</span>') +
+              '</div>' +
+              '<div class="text-xs opacity-60">Latency: ' + escapeHtml(peer.latencyMs) + 'ms</div>' +
+              (peer.error ? '<div class="mt-2 text-xs text-error">' + escapeHtml(peer.error) + '</div>' : '') +
+            '</div>';
+        }).join('');
+      }
+
+      function renderOnboarding(data) {
+        var status = data.onboarding || 'unknown';
+        var copy = {
+          pending: 'Phantom is still in onboarding mode. Expect first-run prompts and limited context.',
+          in_progress: 'Onboarding has started but is not complete yet.',
+          complete: 'Onboarding is complete. Phantom should operate with retained profile context.',
+          unknown: 'Onboarding status was not returned by the runtime.'
+        };
+
+        document.getElementById('onboarding-card').innerHTML =
+          '<div class="mb-2 flex items-center justify-between">' +
+            '<span class="font-semibold">' + escapeHtml(status) + '</span>' +
+            '<span class="' + badgeClass(status === 'complete' ? 'ok' : status === 'in_progress' ? 'degraded' : 'down') + '">' + escapeHtml(status) + '</span>' +
+          '</div>' +
+          '<div class="opacity-70">' + escapeHtml(copy[status] || copy.unknown) + '</div>';
+      }
+
+      function renderInsights(data) {
+        var insights = [];
+
+        if (data.status === 'ok') {
+          insights.push('Core services are healthy. Phantom is currently running without a platform-level outage.');
+        } else if (data.status === 'degraded') {
+          insights.push('Runtime is partially healthy. One or more subsystems are unavailable but the process is still up.');
+        } else {
+          insights.push('Runtime is unhealthy. Treat the current process as degraded until memory services recover.');
+        }
+
+        if (data.memory && data.memory.qdrant && data.memory.ollama) {
+          insights.push('Memory and embedding services are both available, so recall and consolidation paths should be active.');
+        }
+
+        if (data.channels && Object.keys(data.channels).length) {
+          var downChannels = Object.keys(data.channels).filter(function(name) { return !data.channels[name]; });
+          if (downChannels.length) {
+            insights.push('Some channels are registered but not connected: ' + downChannels.join(', ') + '.');
+          } else {
+            insights.push('Every configured channel reported in /health is currently connected.');
+          }
+        } else {
+          insights.push('No connected channels are reported in /health. Use Telegram or re-check channel registration if that is unexpected.');
+        }
+
+        if (data.onboarding === 'pending') {
+          insights.push('Onboarding is still pending, which explains a more limited initial product surface.');
+        }
+
+        document.getElementById('insights-list').innerHTML = insights.map(function(item) {
+          return '<div class="rounded-2xl border border-base-300 bg-base-100/70 p-4">' + escapeHtml(item) + '</div>';
+        }).join('');
+      }
+
+      function renderTimeline(data) {
+        var markers = [
+          {
+            title: 'Runtime checked',
+            detail: 'Health endpoint responded with status "' + (data.status || 'unknown') + '".'
+          },
+          {
+            title: 'Version confirmed',
+            detail: 'Serving Phantom ' + (data.version || '-') + ' as ' + (data.agent || '-')
+          },
+          {
+            title: 'Role loaded',
+            detail: 'Current role is ' + ((data.role && (data.role.name || data.role.id)) || '-')
+          },
+          {
+            title: 'Local dashboard updated',
+            detail: 'Snapshot captured at ' + new Date().toLocaleTimeString()
+          }
+        ];
+
+        document.getElementById('timeline-list').innerHTML = markers.map(function(item, index) {
+          return '' +
+            '<div class="flex gap-3">' +
+              '<div class="flex flex-col items-center">' +
+                '<div class="mt-1 h-3 w-3 rounded-full ' + (index === 0 ? 'bg-primary' : 'bg-base-300') + '"></div>' +
+                (index < markers.length - 1 ? '<div class="mt-2 h-full min-h-[32px] w-px bg-base-300"></div>' : '') +
+              '</div>' +
+              '<div class="pb-4">' +
+                '<div class="font-semibold">' + escapeHtml(item.title) + '</div>' +
+                '<div class="text-sm opacity-65">' + escapeHtml(item.detail) + '</div>' +
+              '</div>' +
+            '</div>';
+        }).join('');
+      }
+
+      function renderPrimaryStats(data) {
         document.getElementById('stat-agent').textContent = data.agent || '-';
         document.getElementById('stat-version').textContent = data.version || '-';
         document.getElementById('stat-uptime').textContent = formatUptime(data.uptime || 0);
-        document.getElementById('stat-evolution').textContent = 'Gen ' + (data.evolution?.generation ?? 0);
+        document.getElementById('stat-evolution').textContent = 'Gen ' + ((data.evolution && data.evolution.generation) || 0);
+        document.getElementById('headline-role').textContent = data.role ? (data.role.name || data.role.id) : '-';
+        document.getElementById('public-url-chip').textContent = data.public_url || 'localhost';
+      }
 
-        // Swap skeleton for real data
-        document.getElementById('status-skeleton').classList.add('hidden');
-        document.getElementById('status-grid').classList.remove('hidden');
-
+      function renderStatusHeader(data) {
         var badge = document.getElementById('status-badge');
-        if (data.status === 'ok') {
-          badge.className = 'badge badge-sm bg-success/15 text-success border-success/25';
-          badge.innerHTML = '<span class="status-dot bg-success status-dot-pulse mr-1.5"></span>online';
-        } else {
-          badge.className = 'badge badge-sm bg-warning/15 text-warning border-warning/25';
-          badge.textContent = data.status;
-        }
-      })
-      .catch(function() {
-        document.getElementById('status-skeleton').classList.add('hidden');
-        document.getElementById('status-grid').classList.remove('hidden');
-        document.getElementById('status-badge').className = 'badge badge-sm bg-error/15 text-error border-error/25';
-        document.getElementById('status-badge').textContent = 'unreachable';
-      });
-  </script>
+        var summary = document.getElementById('status-summary');
+        var signal = document.getElementById('status-signal');
 
-  <!-- SSE auto-reload -->
-  <script>
-    if (window.EventSource) {
-      var es = new EventSource('/ui/api/events');
-      es.addEventListener('reload', function() { location.reload(); });
-    }
+        badge.className = badgeClass(data.status) + ' badge badge-sm';
+        badge.textContent = data.status || 'unknown';
+        summary.textContent =
+          data.status === 'ok' ? 'All critical systems responsive' :
+          data.status === 'degraded' ? 'Runtime is up with partial degradation' :
+          'Runtime requires attention';
+        signal.className = 'signal ' + (data.status === 'ok' ? 'bg-success' : data.status === 'degraded' ? 'bg-warning' : 'bg-error');
+        document.getElementById('last-refresh').textContent = new Date().toLocaleTimeString();
+      }
+
+      function renderRawJson(data) {
+        rawJson.textContent = state.collapsedJson ? '{ ... }' : JSON.stringify(data, null, 2);
+      }
+
+      function renderAll(data) {
+        state.health = data;
+        renderPrimaryStats(data);
+        renderStatusHeader(data);
+        renderSystemGrid(data);
+        renderChannels(data);
+        renderPeers(data);
+        renderOnboarding(data);
+        renderInsights(data);
+        renderTimeline(data);
+        renderRawJson(data);
+      }
+
+      function fetchHealth() {
+        return fetch('/health', { cache: 'no-store' })
+          .then(function(res) { return res.json(); })
+          .then(function(data) {
+            renderAll(data);
+            return data;
+          })
+          .catch(function(error) {
+            document.getElementById('status-badge').className = 'badge badge-sm border-error/20 bg-error/10 text-error';
+            document.getElementById('status-badge').textContent = 'offline';
+            document.getElementById('status-summary').textContent = 'Health endpoint unreachable';
+            rawJson.textContent = 'Failed to load /health\n\n' + String(error);
+          });
+      }
+
+      refreshBtn.addEventListener('click', function() {
+        fetchHealth();
+      });
+
+      copyBtn.addEventListener('click', function() {
+        if (!state.health) return;
+        navigator.clipboard.writeText(JSON.stringify(state.health, null, 2)).then(function() {
+          copyFeedback.textContent = 'Health JSON copied to clipboard.';
+        }).catch(function() {
+          copyFeedback.textContent = 'Clipboard copy failed.';
+        });
+      });
+
+      toggleJsonBtn.addEventListener('click', function() {
+        state.collapsedJson = !state.collapsedJson;
+        toggleJsonBtn.textContent = state.collapsedJson ? 'expand' : 'collapse';
+        if (state.health) renderRawJson(state.health);
+      });
+
+      fetchHealth();
+      setInterval(fetchHealth, 15000);
+
+      if (window.EventSource) {
+        var es = new EventSource('/ui/api/events');
+        es.addEventListener('reload', function() { fetchHealth(); });
+      }
+    })();
   </script>
 </body>
 </html>

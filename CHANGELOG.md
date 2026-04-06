@@ -4,6 +4,16 @@ All notable changes to this project should be documented in this file.
 
 The format is based on Keep a Changelog and this project follows the existing semantic version style already used in the repository.
 
+## [0.18.4] - 2026-04-06
+
+### Added
+- Added a functional control-room style dashboard to the root UI with live subsystem cards, channel visibility, onboarding state, peer status, insights, and raw health inspection.
+- Added client-side refresh and health JSON copy actions to the dashboard.
+
+### Changed
+- Bumped the application version from `0.18.3` to `0.18.4`.
+- Replaced the primitive static landing page in `public/index.html` with a richer operational dashboard that polls `/health` and exposes more of Phantom's runtime state.
+
 ## [0.18.3] - 2026-04-06
 
 ### Added
