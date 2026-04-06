@@ -8,4 +8,4 @@ slack:
 
 telegram:
   enabled: true
-  bot_token: 8659031368:AAFXiEyrevuRZVhSljBC1cd0thm4Jkn7Dlw
+  bot_token: ${TELEGRAM_BOT_TOKEN}

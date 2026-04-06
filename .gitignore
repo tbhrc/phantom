@@ -9,6 +9,8 @@ local/
 *.db
 *.db-wal
 *.db-shm
+phantom-config/memory/*.jsonl
+phantom-config/meta/*.jsonl
 .DS_Store
 bun.lockb
 HANDOFFS.md
